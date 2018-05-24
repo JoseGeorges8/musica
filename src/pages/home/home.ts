@@ -17,7 +17,7 @@ export class HomePage {
 
   ionViewDidLoad(){
       this.musicProvider.getMusic()
-          .subscribe((music: Music[]) => this.allMusic = music);
+          .subscribe((music: any) => this.allMusic = music);
 
   }
 
