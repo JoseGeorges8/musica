@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-
+import {map} from "rxjs/operators";
 
 
 export class Music{
@@ -53,17 +52,17 @@ export class MusicProvider {
 
   getMusic():Observable<Music>{
       //with the .get method we send the GET request to our endpoint which will return an endpoint
-      return this.http.get(API)
       //the RxJS map operator to convert the Observable returned
-          .map(products => {
+      return this.http.get(API).pipe(
+          map(products => {
               return products.map((music) => new Music(music));
-          })
+          }));
 
 
-          //.catch logs any thrown errors
-          .catch((err) => {
-              console.error(err);
-          });
+          // //.catch logs any thrown errors
+          // .catch((err) => {
+          //     console.error(err);
+          // }));
   }
 
 }
