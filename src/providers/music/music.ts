@@ -50,12 +50,12 @@ export class MusicProvider {
     console.log('Hello MusicProvider Provider');
   }
 
-  getMusic():Observable<Music>{
+  getMusic():Observable<any>{
       //with the .get method we send the GET request to our endpoint which will return an endpoint
       //the RxJS map operator to convert the Observable returned
       return this.http.get(API).pipe(
           map(products => {
-              return products.map((music) => new Music(music));
+          return products;
           }));
 
 
