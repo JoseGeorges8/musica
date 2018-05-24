@@ -59,6 +59,7 @@ export class MusicProvider {
               return products.map((music) => new Music(music));
           })
 
+
           //.catch logs any thrown errors
           .catch((err) => {
               console.error(err);
