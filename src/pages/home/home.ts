@@ -78,7 +78,7 @@ export class HomePage {
                   text: "Share on Twitter",
                   icon: "logo-twitter",
                   handler: ()=>{
-                      this.socialSharing.shareViaInstagram(music.name, music.image, music.music_url)
+                      this.socialSharing.shareViaInstagram(music.name, music.image)
                   }
               },
               {
