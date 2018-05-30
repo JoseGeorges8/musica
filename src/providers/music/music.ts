@@ -65,6 +65,14 @@ export class MusicProvider {
           // }));
   }
 
+  getOneSong():Observable<any>{
+      let oneSongUrl = API + "/qty/1";
+      return this.http.get(oneSongUrl).pipe(
+          map(products => {
+              return products;
+          }));
+  }
+
 }
 
 

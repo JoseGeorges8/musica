@@ -8,12 +8,17 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-refresher (ionRefresh)="addOneSong($event)">
+        <ion-refresher-content>
+
+        </ion-refresher-content>
+    </ion-refresher>
   <ion-card *ngFor="let music of allMusic">
     <img [src]="music.image"/>
     <ion-card-content>
       <ion-card-title>{{music.name}}</ion-card-title>
       <ion-item>
-        <button ion-button item-left>Share</button>
+        <button ion-button item-left (click)="shareSong(music)">Share</button>
         <button ion-button item-right>Listen</button>
         <button ion-button icon-only (click)="unfavoriteSong(music)" *ngIf="music.isFavorite"><ion-icon name="star"></ion-icon></button>
         <button ion-button icon-only (click)="favoriteSong(music)" *ngIf="!music.isFavorite"><ion-icon name="star-outline"></ion-icon></button>

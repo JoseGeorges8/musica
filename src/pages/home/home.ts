@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController, ActionSheetController } from 'ionic-angular';
 import {Music, MusicProvider} from "../../providers/music/music";
 import {StorageHandlerProvider} from "../../providers/storage-handler/storage-handler";
+import { SocialSharing } from "@ionic-native/social-sharing";
 
 @Component({
   selector: 'page-home',
@@ -11,13 +12,25 @@ export class HomePage {
 
   public allMusic = [];
 
-  constructor(private storageProvider: StorageHandlerProvider, private musicProvider: MusicProvider, public navCtrl: NavController) {
-
+  constructor(
+      private socialSharing: SocialSharing,
+      private actionSheetController: ActionSheetController,
+      private loadingController: LoadingController ,
+      private storageProvider: StorageHandlerProvider,
+      private musicProvider: MusicProvider,
+      public navCtrl: NavController) {
   }
 
   ionViewDidLoad(){
+      let allMusicLoadingController = this.loadingController.create({
+          content: "Getting Your Music From Server"
+      });
+      allMusicLoadingController.present();
       this.musicProvider.getMusic()
-          .subscribe((music: any) => this.allMusic = music);
+          .subscribe((music: any) => {
+          allMusicLoadingController.dismiss();
+          this.allMusic = music
+      });
   }
 
   ionViewDidEnter(){
@@ -40,6 +53,48 @@ export class HomePage {
           song.isFavorite = true;
       });
       console.log(song.isFavorite);
+  }
+
+  addOneSong(refresher){
+      this.musicProvider.getMusic()
+          .subscribe((music: any) => {
+              this.allMusic.unshift(music[0]);
+              refresher.complete();
+          });
+  }
+
+  shareSong(music){
+      let shareSongActionSheet = this.actionSheetController.create({
+          title: "Share Song",
+          buttons: [
+              {
+                  text: "Share On Facebook",
+                  icon: "logo-facebook",
+                  handler: ()=>{
+                      this.socialSharing.shareViaFacebook(music.name, music.image, music.music_url)
+                  }
+              },
+              {
+                  text: "Share on Twitter",
+                  icon: "logo-twitter",
+                  handler: ()=>{
+                      this.socialSharing.shareViaInstagram(music.name, music.image, music.music_url)
+                  }
+              },
+              {
+                  text: "Share",
+                  icon: "share",
+                  handler: ()=>{
+                      this.socialSharing.share(music.name, "", music.image, music.music_url)
+                  }
+              },
+              {
+                  text: "Cancel",
+                  role: "destructive"
+              }
+          ]
+      });
+      shareSongActionSheet.present();
   }
 
 }
